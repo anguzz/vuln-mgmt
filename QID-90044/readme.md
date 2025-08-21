@@ -1,0 +1,73 @@
+# Policy: QID-90044 — Disable Null Sessions (RestrictAnonymous)
+
+## Description
+This policy remediates **Qualys QID 90044 (Allowed Null Sessions)** by disabling null session connections through the following **Intune Settings Catalog** options:
+
+- **Do Not Allow Anonymous Enumeration of SAM Accounts** → Enabled  
+- **Do Not Allow Anonymous Enumeration of SAM Accounts and Shares** → Enabled  
+- **Restrict Anonymous Access to Named Pipes and Shares** → Enabled  
+- **Restrict Clients Allowed To Make Remote Calls To SAM** → Configurable (see notes below)  
+
+In Intune, these settings are simply toggled to **Enabled**.  
+Behind the scenes, enabling them enforces registry values such as `RestrictAnonymous = 1` or `2`.
+
+---
+
+## Qualys Remediation Notes
+
+- **RestrictAnonymous = 1 (registry value)** → Blocks anonymous enumeration of accounts/shares.  
+  Restrictive, but Qualys may still flag null sessions.  
+
+- **RestrictAnonymous = 2 (registry value)** → Blocks all null session connections (most hardened).  
+  Typically required to fully clear QID 90044 in Qualys.  
+
+Most environments need `RestrictAnonymous = 2` to remediate.  
+
+**Caution:** Setting `2` may break legacy services (old print servers, file shares, or apps).  
+
+**Best practice:**  
+1. Pilot with “Enabled” applied (registry = 2).  
+2. Validate no services break.  
+3. Roll out broadly once confirmed safe.  
+
+---
+
+## Restrict Clients Allowed To Make Remote Calls To SAM
+
+**Purpose**  
+Limits who can remotely query the Security Accounts Manager (SAM). Recommended to restrict to **Administrators only**.
+
+**Registry Path**  
+```
+HKLM\SYSTEM\CurrentControlSet\Control\Lsa\restrictremotesam
+```
+
+**Default SDDL Value**  
+```
+O:BAG:BAD:(A;;RC;;;BA)
+```
+This means only Administrators can make remote SAM calls.  
+
+Recommended to enable (Admins only), but test first—some remote management tools may rely on this.  
+
+---
+
+## Summary
+
+- **In Intune:** Set the listed options to **Enabled**.  
+- **In the registry:** This maps to `RestrictAnonymous = 1` or `2`, with `2` usually required to clear **QID 90044**.  
+- **Restrict Clients Allowed To Make Remote Calls To SAM** → Recommended (Admins only), but test before wide deployment.  
+
+# links
+
+- https://www.syxsense.com/syxsense-securityarticles/cis_benchmarks/syx-1033-12314.html
+
+- https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/network-access-restrict-clients-allowed-to-make-remote-sam-calls
+
+- https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/network-access-do-not-allow-anonymous-enumeration-of-sam-accounts
+
+- https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/network-access-do-not-allow-anonymous-enumeration-of-sam-accounts-and-shares?
+
+
+
+
