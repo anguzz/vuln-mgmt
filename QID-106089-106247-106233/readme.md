@@ -108,7 +108,6 @@ Microsoft recommends upgrading all endpoints to **.NET 8**, or newer supported r
 | **Pilot**          | Deploy to  ring group (Ring 0). Monitor for app compatibility issues.                      |
 | **Validation**     | Confirm Qualys QIDs 106089, 106247, and 106233 total count decrease fter 24–48 hours.      |
 | **Global Rollout** | Expand deployment to remaining Intune device groups.                                       |
-| **Monitoring**     | Validate through Graph API output (`DOTNET6.csv`) and Qualys compliance dashboards.        |
 
 ---
 
