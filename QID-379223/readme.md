@@ -140,11 +140,21 @@ Disabled feature: SMB1Protocol-Deprecation
 # **Deployment Steps (Tanium)**
 
 1. Upload `disable.ps1` as an **Action** or **Package**
+
+Name: `Disable SMB1 Protocols -  Qualys ID379223` 
+
+Install command: `cmd.exe /c powershell.exe -ExecutionPolicy bypass -WindowStyle Hidden -NonInteractive -NoProfile -File uninstall.ps1`
+
+Verificaton query: `Windows Features not contains "SMB1Protocol"`
+
 2. Target using:
 
    ```
-   Get Windows Features from all entities with Windows Features contains SMB1
+   Get Windows Features from all entities
    ```
+
+   Add a filter for `SMB1`
+
 3. Deploy as:
 
    * **Once** to remove existing SMBv1
@@ -154,9 +164,9 @@ Disabled feature: SMB1Protocol-Deprecation
 
 # **Outcome**
 
-After rollout:
+After rollout: (Confirmeed functional 12/4/25)
 
-* Qualys QID 379223 should drop from affected endpoints
+* Qualys QID 379223 should drop from targetted endpoints
 * Tanium Windows Features should show **all SMB1 features removed/disabled**
 * ADMX-backed Intune configuration ensures continued prevention of SMBv1 loading
 * Ransomware lateral movement vector significantly reduced
