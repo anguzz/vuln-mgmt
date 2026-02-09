@@ -108,8 +108,8 @@ cmd.exe /c "C:\ProgramData\Citrix\Citrix Workspace 1812\ReceiverCleanupUtility.e
 * **Filters:**
 
   * Application contains: `Citrix Workspace`
-  * Version: `1812` (or broader as needed)
-  * Device scope: FBM workstations
+  * Version: `target version` (or broader as needed)
+  * Device scope: workstations 
 
 ### Package Name
 
